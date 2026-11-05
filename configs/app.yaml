@@ -1,0 +1,42 @@
+project:
+  name: Smart Parking AI
+  version: 0.1.0
+  root: .
+
+paths:
+  data: data
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  manifests: data/manifests
+  splits: data/splits
+  models: models/checkpoints
+  registry: models/model_registry
+  outputs: outputs
+  logs: logs
+
+server:
+  host: 127.0.0.1
+  port: 5000
+  max_upload_mb: 250
+  debug: false
+
+processing:
+  device: cpu
+  max_image_dim: 1600
+  video_sample_fps: 0
+  max_video_frames: 0
+  jpeg_quality: 92
+  save_outputs: true
+
+validation:
+  min_image_side: 64
+  max_image_side: 8192
+  allowed_image_extensions: [".jpg", ".jpeg", ".png", ".bmp", ".webp"]
+  allowed_video_extensions: [".mp4", ".avi", ".mov", ".mkv", ".webm"]
+
+quality:
+  min_brightness: 35.0
+  min_laplacian_variance: 25.0
+  min_visible_fraction: 0.60
+  max_glare_fraction: 0.35

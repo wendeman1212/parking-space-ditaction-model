@@ -1,0 +1,11 @@
+algorithm: bytetrack
+tracker_yaml: bytetrack.yaml
+track_activation_threshold: 0.30
+lost_track_buffer: 60
+minimum_matching_threshold: 0.80
+minimum_consecutive_frames: 2
+max_track_age_seconds: 30.0
+min_track_length: 3
+history_size: 120
+stationary_iou_threshold: 0.60
+stationary_time_seconds: 2.0

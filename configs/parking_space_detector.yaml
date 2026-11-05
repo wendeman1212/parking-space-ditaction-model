@@ -1,0 +1,50 @@
+mode: combined  # automatic | calibrated | combined
+
+obb_model:
+  path: models/checkpoints/parking_slots_obb.pt
+  architecture: yolo11n-obb
+  weights_origin: "Fine-tuned from Ultralytics YOLO11n-OBB on MetaPKLot/PKLot parking-space annotations"
+  imgsz: 640
+  device: cpu
+  confidence: 0.25
+  iou: 0.45
+
+automatic:
+  min_space_area_px: 900
+  max_space_area_fraction: 0.08
+  min_aspect_ratio: 0.30
+  max_aspect_ratio: 3.50
+  min_layout_spaces: 3
+  min_layout_confidence: 0.25
+  max_detections: 300
+  validation:
+    min_ground_y_ratio: 0.14
+    max_internal_std: 55.0
+    max_edge_density: 0.11
+    max_saturation: 85.0
+    min_brightness: 30.0
+    max_brightness: 220.0
+  line_detection:
+    canny_low: 60
+    canny_high: 160
+    hough_threshold: 45
+    min_line_length: 40
+    max_line_gap: 12
+    angle_tolerance_deg: 22.0
+    parallel_tolerance_deg: 14.0
+
+calibrated:
+  layout_dir: data/processed/layouts
+  require_verified: true
+
+geometry:
+  duplicate_iou: 0.80
+  min_bbox_side_px: 24
+  expand_fraction: 0.04
+
+training:
+  epochs: 30
+  batch_size: 8
+  imgsz: 640
+  patience: 10
+  seed: 2026

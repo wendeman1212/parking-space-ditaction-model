@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Parking AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div>
+        <p class="eyebrow">Computer vision dashboard</p>
+        <h1>Smart Parking AI</h1>
+        <p class="subtitle">Upload a parking-lot image or video to detect spaces, vehicles and occupancy.</p>
+      </div>
+      <div class="header-meta">
+        <span class="pill" id="health-pill">Checking API...</span>
+        <span class="muted">Max upload {{ max_upload_mb }} MB</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card upload-card" aria-labelledby="upload-title">
+      <h2 id="upload-title">Run an analysis</h2>
+      <form id="upload-form" novalidate>
+        <label class="dropzone" id="dropzone" for="file-input">
+          <input id="file-input" name="file" type="file" required
+                 accept="{{ (image_extensions + video_extensions) | join(',') }}">
+          <span class="dropzone-title">Drop a file here or click to browse</span>
+          <span class="dropzone-hint">{{ image_extensions | join(' ') }} &middot; {{ video_extensions | join(' ') }}</span>
+          <span class="file-name" id="file-name">No file selected</span>
+        </label>
+
+        <div class="options-grid">
+          <label class="field">
+            <span>Parking layout (optional JSON)</span>
+            <input id="layout-input" name="layout" type="file" accept=".json,application/json">
+            <small>Provide known space polygons to skip automatic detection.</small>
+          </label>
+          <label class="field">
+            <span>Video frame limit</span>
+            <input id="max-frames" name="max_frames" type="number" min="1" step="1" placeholder="All frames">
+            <small>Lower this for quick previews of long videos.</small>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="submit-button" type="submit">Analyze</button>
+          <span class="status" id="status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="results" id="results" hidden aria-live="polite">
+      <div class="result-head">
+        <div>
+          <p class="eyebrow">Run <span id="run-id">-</span></p>
+          <h2>Analysis result</h2>
+        </div>
+        <div class="badges">
+          <span class="badge" id="scene-badge">-</span>
+          <span class="badge badge-muted" id="kind-badge">-</span>
+        </div>
+      </div>
+
+      <p class="notice" id="report-notice" hidden>Scene is not confidently a parking lot; occupancy numbers may be unreliable.</p>
+
+      <div class="stats" id="stats">
+        <div class="stat"><span class="stat-label">Total spaces</span><strong id="stat-total">0</strong></div>
+        <div class="stat"><span class="stat-label">Occupied</span><strong id="stat-occupied">0</strong></div>
+        <div class="stat"><span class="stat-label">Empty</span><strong id="stat-empty">0</strong></div>
+        <div class="stat"><span class="stat-label">Uncertain</span><strong id="stat-uncertain">0</strong></div>
+        <div class="stat"><span class="stat-label">Occupancy</span><strong id="stat-percentage">-</strong></div>
+        <div class="stat"><span class="stat-label">Vehicles</span><strong id="stat-vehicles">0</strong></div>
+        <div class="stat"><span class="stat-label">Entries</span><strong id="stat-entries">0</strong></div>
+        <div class="stat"><span class="stat-label">Exits</span><strong id="stat-exits">0</strong></div>
+      </div>
+
+      <div class="result-grid">
+        <div class="card media-card">
+          <h3>Annotated output</h3>
+          <div class="media-holder" id="media-holder"></div>
+          <div class="media-meta">
+            <span id="media-meta">-</span>
+            <span class="links">
+              <a id="download-json" href="#" download>Download JSON</a>
+              <a id="open-output" href="#" target="_blank" rel="noopener">Open original</a>
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Scene evidence</h3>
+          <dl class="kv" id="scene-details"></dl>
+          <h3>Timings</h3>
+          <dl class="kv" id="timing-details"></dl>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="card">
+          <h3>Parking spaces <span class="count" id="spaces-count">0</span></h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>ID</th><th>State</th><th>Confidence</th><th>Coverage</th><th>Method</th></tr>
+              </thead>
+              <tbody id="spaces-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Events <span class="count" id="events-count">0</span></h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Time</th><th>Type</th><th>Space</th><th>State</th><th>Confidence</th></tr>
+              </thead>
+              <tbody id="events-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <details class="card raw-card">
+        <summary>Raw JSON response</summary>
+        <pre id="raw-json"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="wrap site-footer">
+    <span>Smart Parking AI &middot; YOLO detection, occupancy classification and scene validation</span>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

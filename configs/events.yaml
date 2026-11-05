@@ -1,0 +1,21 @@
+entry_exit:
+  enabled: true
+  require_boundaries: true
+  boundaries_file: data/processed/layouts/boundaries.json
+  entrance_ids: [entrance_1]
+  exit_ids: [exit_1]
+  crossing_confirm_frames: 2
+  min_displacement_px: 8.0
+  dedupe_seconds: 15.0
+
+parking:
+  confirm_seconds: 4.0
+  motion_confirm_seconds: 2.0
+  vacated_confirm_seconds: 4.0
+  min_space_overlap: 0.25
+  dedupe_seconds: 30.0
+
+output:
+  save_csv: true
+  save_json: true
+  snapshot_on_event: true

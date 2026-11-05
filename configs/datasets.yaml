@@ -1,0 +1,51 @@
+pklot:
+  source: "https://web.inf.ufpr.br/vri/databases/parking-lot-database/"
+  mirror: "https://huggingface.co/datasets/DSBD-Research/MetaPKLot-Dataset"
+  license: "CC BY 4.0"
+  citation: "Almeida et al., PKLot - A robust dataset for parking lot classification, ESWA 42(11), 2015"
+  raw_dir: data/raw/pklot
+  annotation_dir: data/raw/metapklot_annotations
+  extracted_annotation_dir: data/interim/metapklot
+  subsets: [ufpr04, ufpr05, pucpr]
+  frames_per_subset: 120
+  dates_per_subset: 30
+  images_per_date: 4
+  split:
+    train_cameras: [ufpr04, ufpr05]
+    validation_fraction_of_dates: 0.20
+    test_cameras: [pucpr]
+
+coco:
+  source: "http://cocodataset.org"
+  license: "Creative Commons Attribution 4.0"
+  raw_dir: data/raw/coco
+  annotations_zip: data/raw/coco/annotations_trainval2017.zip
+  negative_scene_count: 360
+  vehicle_eval_count: 150
+  val_url: "http://images.cocodataset.org/val2017"
+  caption_keywords:
+    - building
+    - buildings
+    - street
+    - house
+    - houses
+    - city
+    - road
+    - sidewalk
+    - skyline
+    - church
+  exclude_keywords:
+    - parking lot
+    - parking garage
+    - parking space
+  vehicle_categories: [3, 4, 6, 8]  # car, motorcycle, bus, truck (COCO ids)
+
+splits:
+  seed: 2026
+  occupancy:
+    train: [ufpr04, ufpr05]
+    validation: [ufpr04, ufpr05]
+    test: [pucpr]
+  scene:
+    train: [ufpr04, ufpr05]
+    test: [pucpr]

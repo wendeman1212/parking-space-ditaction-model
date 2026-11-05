@@ -1,0 +1,25 @@
+model:
+  path: models/checkpoints/scene_mobilenetv3.pt
+  architecture: mobilenet_v3_small
+  weights_origin: "TorchVision MobileNetV3-Small ImageNet weights, fine-tuned on MetaPKLot/PKLot frames and COCO non-parking negatives"
+  input_size: 224
+  device: cpu
+  classes: [NON_PARKING, PARKING]
+  batch_size: 64
+
+training:
+  epochs: 8
+  batch_size: 32
+  learning_rate: 0.0002
+  weight_decay: 0.0001
+  num_workers: 0
+  seed: 2026
+  class_balance: true
+  patience: 3
+
+thresholds:
+  confirmed_probability: 0.75
+  possible_probability: 0.50
+  layout_confirm_spaces: 3
+  layout_possible_spaces: 1
+  layout_min_confidence: 0.25
