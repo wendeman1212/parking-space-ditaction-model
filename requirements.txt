@@ -1,0 +1,7 @@
+Flask>=2.3,<4
+numpy>=1.26,<3
+opencv-python>=4.8,<6
+PyYAML>=6,<7
+ultralytics>=8.3,<9
+torch>=2.2
+torchvision>=0.17
